@@ -1,0 +1,16 @@
+name: build-and-test
+on: [push, pull_request]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    env:
+      # Test projects target netcoreapp2.x (not installable on ubuntu-latest); roll forward to the .NET 9 runtime.
+      DOTNET_ROLL_FORWARD: Major
+      NuGetAudit: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - run: dotnet build src/log4stash.sln
+      - run: dotnet test src/log4stash.UnitTests --no-build
