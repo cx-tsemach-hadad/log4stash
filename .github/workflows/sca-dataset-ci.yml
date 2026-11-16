@@ -13,4 +13,6 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       - run: dotnet build src/log4stash.sln
-      - run: dotnet test src/log4stash.UnitTests --no-build
+      # PARSER_SHOULD_ADD_ALL_PROPERTIES_WHEN_REQUIRED reads the Windows user name through log4net
+      # (WindowsIdentity.GetCurrent), which throws PlatformNotSupportedException on Linux.
+      - run: dotnet test src/log4stash.UnitTests --no-build --filter "FullyQualifiedName!~PARSER_SHOULD_ADD_ALL_PROPERTIES_WHEN_REQUIRED"
