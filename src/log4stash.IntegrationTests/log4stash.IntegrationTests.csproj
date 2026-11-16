@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.10" />
+    <PackageReference Include="log4net" Version="3.5.0" />
     <PackageReference Include="Nest" Version="7.6.1" />
     <PackageReference Include="Nest.JsonNetSerializer" Version="7.6.1" />
     <PackageReference Include="Newtonsoft.json" Version="13.0.2" />
