@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
@@ -13,13 +13,13 @@
 	
 
 	<ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.10" />
+    <PackageReference Include="log4net" Version="3.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
     <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" PrivateAssets="All" />
 	</ItemGroup>
 
-	<Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)|$(TargetFramework)' == 'Release|netstandard2.0' Or '$(Configuration)|$(TargetFramework)' == 'Release|net452'">
+	<Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)|$(TargetFramework)' == 'Release|netstandard2.0' Or '$(Configuration)|$(TargetFramework)' == 'Release|net462'">
 		<PropertyGroup>
 			<WorkingDirectory>$(OutputPath)</WorkingDirectory>
 		</PropertyGroup>

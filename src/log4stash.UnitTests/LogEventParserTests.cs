@@ -23,10 +23,7 @@ namespace log4stash.UnitTests
         {
             //Arrange
             var universalDate = DateTime.UtcNow;
-            var localTime = universalDate.ToLocalTime();
-#pragma warning disable 618
-            var loggingEvent = new LoggingEvent(new LoggingEventData {TimeStamp = localTime});
-#pragma warning restore 618
+            var loggingEvent = new LoggingEvent(new LoggingEventData {TimeStampUtc = universalDate});
             var parser = new BasicLoggingEventParser(string.Empty, FixFlags.None, true, _exceptionFactory);
             var resultDictionary = new Dictionary<string, object>();
 
