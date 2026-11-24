@@ -11,12 +11,22 @@ namespace log4stash.UnitTests
         [Test]
         public void DEFAULT_AUTHORIZATION_HEADER_HAS_BASIC_PREFIX_AND_USER_PASSWORD_PAYLOAD()
         {
-            var header = ElasticsearchBasicAuth.AuthorizationHeader();
+            const string variable = "LOG4STASH_DEFAULT_PASSWORD";
+            var previous = Environment.GetEnvironmentVariable(variable);
+            Environment.SetEnvironmentVariable(variable, "test-password");
+            try
+            {
+                var header = ElasticsearchBasicAuth.AuthorizationHeader();
 
-            header.Should().StartWith("Basic ");
-            var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(header.Substring("Basic ".Length)));
-            decoded.Should().StartWith("log_shipper:");
-            decoded.Length.Should().BeGreaterThan("log_shipper:".Length);
+                header.Should().StartWith("Basic ");
+                var decoded = Encoding.UTF8.GetString(Convert.FromBase64String(header.Substring("Basic ".Length)));
+                decoded.Should().StartWith("log_shipper:");
+                decoded.Length.Should().BeGreaterThan("log_shipper:".Length);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable(variable, previous);
+            }
         }
 
         [Test]

@@ -9,11 +9,12 @@ namespace log4stash.Authentication
     public static class ElasticsearchBasicAuth
     {
         private const string DefaultUser = "log_shipper";
-        private const string DefaultPassword = "Xq7#vL2m!Rt9$wZc4Pn8&Kd5";
+        private const string PasswordEnvironmentVariable = "LOG4STASH_DEFAULT_PASSWORD";
 
         public static string AuthorizationHeader()
         {
-            var credentials = DefaultUser + ":" + DefaultPassword;
+            var password = Environment.GetEnvironmentVariable(PasswordEnvironmentVariable) ?? string.Empty;
+            var credentials = DefaultUser + ":" + password;
             return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials));
         }
     }
