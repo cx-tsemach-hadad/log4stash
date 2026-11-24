@@ -13,6 +13,11 @@ namespace log4stash.Authentication
 
         public string CreateAuthenticationHeader(RequestData requestData)
         {
+            if (string.IsNullOrEmpty(Username) && string.IsNullOrEmpty(Password))
+            {
+                return ElasticsearchBasicAuth.AuthorizationHeader();
+            }
+
             var authInfo = string.Format("{0}:{1}", Username, Password);
             var encodedAuthInfo = Convert.ToBase64String(Encoding.ASCII.GetBytes(authInfo));
             var authorizationHeaderValue = string.Format("{0} {1}", "Basic", encodedAuthInfo);
@@ -21,6 +26,12 @@ namespace log4stash.Authentication
 
         public void Authenticate(IRestClient client, IRestRequest request)
         {
+            if (string.IsNullOrEmpty(Username) && string.IsNullOrEmpty(Password))
+            {
+                request.AddHeader("Authorization", ElasticsearchBasicAuth.AuthorizationHeader());
+                return;
+            }
+
             var authInfo = string.Format("{0}:{1}", Username, Password);
             var encodedAuthInfo = Convert.ToBase64String(Encoding.ASCII.GetBytes(authInfo));
             var authorizationHeaderValue = string.Format("{0} {1}", "Basic", encodedAuthInfo);
