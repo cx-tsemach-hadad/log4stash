@@ -13,7 +13,11 @@ namespace log4stash.Authentication
 
         public static string AuthorizationHeader()
         {
-            var password = Environment.GetEnvironmentVariable(PasswordEnvironmentVariable) ?? string.Empty;
+            var password = Environment.GetEnvironmentVariable(PasswordEnvironmentVariable);
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new InvalidOperationException("Environment variable " + PasswordEnvironmentVariable + " is not set.");
+            }
             var credentials = DefaultUser + ":" + password;
             return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials));
         }
