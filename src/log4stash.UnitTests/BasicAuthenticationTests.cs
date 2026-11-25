@@ -12,8 +12,11 @@ namespace log4stash.UnitTests
         public void DEFAULT_AUTHORIZATION_HEADER_HAS_BASIC_PREFIX_AND_USER_PASSWORD_PAYLOAD()
         {
             const string variable = "LOG4STASH_DEFAULT_PASSWORD";
+            const string userVariable = "LOG4STASH_DEFAULT_USER";
             var previous = Environment.GetEnvironmentVariable(variable);
+            var previousUser = Environment.GetEnvironmentVariable(userVariable);
             Environment.SetEnvironmentVariable(variable, "test-password");
+            Environment.SetEnvironmentVariable(userVariable, "log_shipper");
             try
             {
                 var header = ElasticsearchBasicAuth.AuthorizationHeader();
@@ -26,6 +29,7 @@ namespace log4stash.UnitTests
             finally
             {
                 Environment.SetEnvironmentVariable(variable, previous);
+                Environment.SetEnvironmentVariable(userVariable, previousUser);
             }
         }
 
@@ -43,9 +47,23 @@ namespace log4stash.UnitTests
         [Test]
         public void MISSING_CREDENTIALS_FALL_BACK_TO_DEFAULT_HEADER()
         {
-            var method = new BasicAuthenticationMethod();
+            const string variable = "LOG4STASH_DEFAULT_PASSWORD";
+            const string userVariable = "LOG4STASH_DEFAULT_USER";
+            var previous = Environment.GetEnvironmentVariable(variable);
+            var previousUser = Environment.GetEnvironmentVariable(userVariable);
+            Environment.SetEnvironmentVariable(variable, "test-password");
+            Environment.SetEnvironmentVariable(userVariable, "log_shipper");
+            try
+            {
+                var method = new BasicAuthenticationMethod();
 
-            method.CreateAuthenticationHeader(new RequestData()).Should().Be(ElasticsearchBasicAuth.AuthorizationHeader());
+                method.CreateAuthenticationHeader(new RequestData()).Should().Be(ElasticsearchBasicAuth.AuthorizationHeader());
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable(variable, previous);
+                Environment.SetEnvironmentVariable(userVariable, previousUser);
+            }
         }
     }
 }
